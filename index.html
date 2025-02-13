@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Temple by Region</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="temple" class="templeall">
+      <h1>TEMPLE BY REGION</h1>
+      <p>ค้นหาข้อมูลวัดตามภูมิภาค</p>
+
+      <div class="controls">
+        <button onclick="setColumns(2)">2 Columns</button>
+        <button onclick="setColumns(3)">3 Columns</button>
+        <button onclick="setColumns(4)">4 Columns</button>
+        <button onclick="toggleAutoplay()">
+          Toggle Auto Play (<span id="autoplay-status">ON</span>)
+        </button>
+      </div>
+
+      <div id="carousel" class="carousel">
+        <div id="watthai" class="wat">
+          <img
+            id="imagewatthai"
+            class="imagewatthai2"
+            src="public/north.jpeg"
+            alt="ภาคเหนือ"
+          />
+          <div class="overlay">
+            <p class="text">ภาคเหนือ</p>
+          </div>
+        </div>
+        <div id="watthai" class="wat">
+          <img
+            id="imagewatthai"
+            class="imagewatthai2"
+            src="public/central.jpg"
+            alt="ภาคกลาง"
+          />
+          <p>ภาคกลาง</p>
+        </div>
+        <div id="watthai" class="wat">
+          <img
+            id="imagewatthai"
+            class="imagewatthai2"
+            src="public/northeast.jpg"
+            alt="ภาคตะวันออกเฉียงเหนือ"
+          />
+          <p>ภาคตะวันออกเฉียงเหนือ</p>
+        </div>
+        <div id="watthai" class="wat">
+          <img
+            id="imagewatthai"
+            class="imagewatthai2"
+            src="public/west.jpg"
+            alt="ภาคตะวันตก"
+          />
+          <p>ภาคตะวันตก</p>
+        </div>
+      </div>
+
+      <div class="dots">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
