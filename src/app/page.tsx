@@ -1,95 +1,96 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+import React, { useState } from "react";
+import {
+  SelectInput,
+  TextInput,
+  DateSelect,
+  getCurrentDateTime,
+} from "../component/CustomInputs";
+import { Button } from "react-bootstrap";
+import ReportComponent from "@/component/ReportComponent";
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [type, setType] = useState("income");
+  const [title, setTitle] = useState("");
+  const [amount, setAmount] = useState("");
+  const [transactionDate, setTransactionDate] = useState("");
+  const [createdAt] = useState(getCurrentDateTime());
+  const [updatedAt] = useState(getCurrentDateTime());
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const transactionData = {
+      type,
+      title,
+      amount,
+      transactionDate,
+      createdAt,
+      updatedAt,
+    };
+
+    try {
+      const response = await fetch("/api/transactions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(transactionData),
+      });
+
+      if (response.ok) {
+        alert("บันทึกข้อมูลสำเร็จ!");
+        setType("income");
+        setTitle("");
+        setAmount("");
+        setTransactionDate("");
+      } else {
+        alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์");
+    }
+  };
+
+  return (
+    <div>
+      <main>
+        <h1>บันทึกรายรับ/รายจ่าย</h1>
+        <form onSubmit={handleSubmit}>
+          <SelectInput
+            label="ประเภท"
+            options={["รายรับ", "รายจ่าย"]}
+            value={type}
+            onChange={setType}
+          />
+          <TextInput
+            label="ชื่อรายการใช้จ่าย"
+            value={title}
+            onChange={setTitle}
+          />
+          <TextInput
+            label="จำนวนเงิน (ทศนิยม 2 ตำแหน่ง)"
+            type="text"
+            value={amount}
+            onChange={(newValue: string) => {
+              if (/^\d*\.?\d{0,2}$/.test(newValue)) {
+                setAmount(newValue);
+              }
+            }}
+          />
+          <DateSelect
+            label="วันที่ใช้จ่าย"
+            value={transactionDate}
+            onChange={setTransactionDate}
+          />
+          <Button type="submit" variant="primary">
+            บันทึกข้อมูล
+          </Button>
+        </form>
+        <hr className="my-5" />
+        <ReportComponent />
       </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }
